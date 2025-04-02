@@ -1,22 +1,34 @@
 import {Schema,model} from 'mongoose';
 
 const eventSchema= new Schema({
-    name: {
+    title: {
         type: String,
         required: true,
     },
     description: {
         type: String,
-        required: true,
+    },
+    category:{
+        type: String,
+        enum: ['sports', 'music', 'art', 'technology', 'food', 'travel','other'],
+        default: 'other',
+        
     },
     date: {
         type: Date,
-        required: true,
+        default: Date.now,
+    },
+    image:{
+        type: String,
+    
     },
     location: {
         type: String,
-        required: true,
     },
+     author:{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+     },
     attendees: [{
         type: Schema.Types.ObjectId,
         ref: 'User',

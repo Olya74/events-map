@@ -1,7 +1,11 @@
 import Event from "../models/Event.js";
 
+
+
+//const token=req.headers["Authorization"];
   const getEvents = async (req, res) => {
     try {
+        console.log(req.user);
         const events = await Event.find();
         res.status(200).json(events);
     } catch (error) {
@@ -11,6 +15,7 @@ import Event from "../models/Event.js";
 const addEvent = async (req, res) => {
     const event = new Event(req.body);
     try {
+        console.log(req.user);
         const savedEvent = await event.save();
         res.status(201).json(savedEvent);
     } catch (error) {

@@ -10,13 +10,17 @@ const userSchema= new Schema({
         required: true,
         unique: true,
     },
+    avatar: {
+        type: String,
+        default:''
+    },
     password: {
         type: String,
         required: true,
     },
     role:{
         type: String,
-        enum: ['admin', 'user'],
+        enum: ['admin', 'user', 'guest'],
         default: 'user',
     },
     events: [{
@@ -24,6 +28,8 @@ const userSchema= new Schema({
         ref: 'Event',
     }],
 
+},{
+    timestamps: true,
 });
 // userSchema.pre('save', function(next) {
 //     this.updatedAt = Date.now();

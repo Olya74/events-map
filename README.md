@@ -34,3 +34,7 @@ Project for portfolio
     └── package.json
     └── README.md
 ```
+# frontend
+## npm create vite@latest
+## npm i axios
+## npm i socket.io-client
