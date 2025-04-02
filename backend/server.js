@@ -1,7 +1,7 @@
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
-import ChatMessage from './models/chatMessage.js';
+import ChatMessage from './models/ChatMessage.js';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import 'dotenv/config.js';
