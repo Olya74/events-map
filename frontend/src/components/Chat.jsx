@@ -1,32 +1,40 @@
-import {use, useEffect,useState} from 'react'
+import { useEffect,useState} from 'react'
 import {io} from 'socket.io-client'
 import api from '../api'
 
-const socket = io('http://localhost:8834')
+const socket = io('http://localhost:8834', {
+    transports: ['websocket'],
+    upgrade: false,
+    auth: {
+        token: localStorage.getItem('token'),
+    },
+});
 
-function Chat(eventId,user) {
+function Chat(eventId,userId) {
     const [messages, setMessages] = useState([]);
     const [text, setText] = useState('');
     useEffect(() => {
         socket.emit('joinRoom', eventId);
-        api.get(`/events/${eventId}/chat`).then(res=>{
-            setMessages(res.data);
+        api.get(`/events/${eventId}/chat`).then((res) => {
+          setMessages(res.data);
+          // console.log(res.data);
         });
+        
         socket.on('newMessage', (message) => {
             setMessages((prevMessages) => [...prevMessages, message]);
         });
-        socket.on('chatHistory', (history) => {
-            setMessages(history);
-        });
+        // socket.on('chatHistory', (history) => {
+        //     setMessages(history);
+        // });
         return () => {
             socket.off('message');
-            socket.off('chatHistory');
+            // socket.off('chatHistory');
         };
     }
     , [eventId]);
     const sendMessage = () => {
         if (text.trim()) {
-            socket.emit('sendMessage', {eventId,userId:user.id, text});
+            socket.emit('sendMessage', {eventId,userId, text});
             setText('');
         }
     }
@@ -36,10 +44,10 @@ function Chat(eventId,user) {
       <h2>Event Chat</h2>
       <div className="chat-box">
         {messages.map((message) => (
-          <p key={message.id} className="message">
-            <strong>{message.userId}: </strong>
+          <div key={message._id} className="message">
+            <strong>{message.userId.name}: </strong>
             {message.text}
-          </p>
+          </div>
         ))}
       </div>
       <div className="chat-input">
@@ -51,7 +59,7 @@ function Chat(eventId,user) {
         />
         <button onClick={sendMessage}>Send</button>
       </div>
-      <style jsx>{`
+      {/* <style jsx>{`
         .chat-box {
           border: 1px solid #ccc;
           padding: 10px;
@@ -74,7 +82,7 @@ function Chat(eventId,user) {
         button {
           padding: 5px 10px;
         }
-      `}</style>
+      `}</style> */}
     </div>
   );
 }

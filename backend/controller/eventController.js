@@ -22,7 +22,7 @@ const addEvent = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 }
-const deleteEventss = async (req, res) => {
+const deleteEvents = async (req, res) => {
     try {
         const deletedEvent = await Event.deleteMany();
         res.status(200).json(deletedEvent);
@@ -52,5 +52,5 @@ export {
     addEvent,
     updateEventById,
     updateEventPartById,
-    deleteEventss
+    deleteEvents
 }

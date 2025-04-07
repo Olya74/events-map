@@ -23,7 +23,7 @@ const userSchema= new Schema({
         enum: ['admin', 'user', 'guest'],
         default: 'user',
     },
-    events: [{
+    eventId: [{
         type: Schema.Types.ObjectId,
         ref: 'Event',
     }],

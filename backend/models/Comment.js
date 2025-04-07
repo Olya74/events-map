@@ -1,13 +1,12 @@
-import { text } from 'express';
 import {Schema, model} from 'mongoose';
 
 const commentSchema = new Schema({
     text:String,
-    event: {
+    eventId: {
         type: Schema.Types.ObjectId,
         ref: 'Event',
     },
-    author: {
+    userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
     },

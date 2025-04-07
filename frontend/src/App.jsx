@@ -1,59 +1,46 @@
-import { useState, useEffect } from 'react'
-import './App.css';
-import api from './api'
-import Register from './components/Register';
-import Chat from './components/Chat';
-function App() {
-  //   const [users,setUsers] = useState([])
-  // useEffect(() => {
-  //   api
-  //     .get("/users")
-  //     .then((res) => {
-  //       setUsers(res.data)})
-  //     .catch(() => setUsers(null));
-  // }
-  // ,[])
-    const [user,setUser] = useState(null)
+import { useState, useEffect } from "react";
+
+import useAuthStore from "./store/useAuthStore";
+import RegisterForms from "./components/RegisterForms";
+import LoginForm from "./components/LoginForm";
+
+const App = () => {
+  const { user, loading, fetchUser, logout } = useAuthStore();
+  const [showRegister, setShowRegister] = useState(false);
+
   useEffect(() => {
-    api
-      .get("/auth")
-      .then((res) => {
-        setUser(res.data)})
-      .catch(() => setUser(null));
-  }
-  ,[])
-  const logout = () => {
-    localStorage.removeItem('token')
-    setUser(null)
-  };
-  return (
-    <div>
-      <Chat eventId={1} user={user} />
-      {user ? (
+    fetchUser();
+  }, []);
+
+  if (loading) return <p>Loading....</p>;
+
+  if (user) {
+    return (
       <div>
-        <h1>Welcome {user.name}</h1>
-        <p>{user.email}</p>
+        <h1>Welcome back,{user.name}</h1>
         <button onClick={logout}>Logout</button>
       </div>
-     ) : (
-      <div>
-        <h1>Please login</h1>
-      </div>
-     )}
-      {/* <Register /> */}
-      {/* {users.length>0 ? (
-      <div>
-        <h1>Welcome {users[0].name}</h1>
-        <p>{users[0].email}</p>
-      </div>
-     ) : (
-      <div>
-        <h1>Please login</h1>
-      
-      </div>
-     )} */}
+    );
+  }
+  return (
+    <div>
+      {showRegister ? <RegisterForms /> : <LoginForm />}
+
+      <p>
+        {showRegister ? (
+          <>
+            Already have an account?{" "}
+            <button onClick={() => setShowRegister(false)}>Login</button>
+          </>
+        ) : (
+          <>
+            Don't have an account ?{" "}
+            <button onClick={() => setShowRegister(true)}>Register</button>
+          </>
+        )}
+      </p>
     </div>
   );
-}
+};
 
-export default App
+export default App;

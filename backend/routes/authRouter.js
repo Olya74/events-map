@@ -2,22 +2,17 @@ import express from 'express';
 
 import {
   registration,
-  login
-  
-} from '../controller/userController.js';
+  login,
+  logout,
+  authMe,
+} from "../controller/userController.js";
 const authRouter = express.Router();
 
 
 authRouter.route("/register").post(registration);
-
 authRouter.route("/login").post(login);
-authRouter.route("/").get((req, res) => {
-  res.json({ message: "you are authenticated!" });
-});
-authRouter.route("/logout").post((req, res) => {
-  // Perform logout logic here (e.g., invalidate session)
-  res.status(200).json({ message: "User logged out successfully" });
-});
+authRouter.route("/me").get(authMe);
+authRouter.route("/logout").post(logout);
 authRouter.route("/forgot-password").post((req, res) => {
   const { email } = req.body;
   // Perform password reset logic here (e.g., send reset link)

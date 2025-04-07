@@ -7,6 +7,7 @@ import {
   getUserById,
   addUser,
   updateUserById,
+  updateUserPartById,
   deleteUsers
 } from '../controller/userController.js';
 const userRouter = express.Router();
@@ -43,6 +44,10 @@ userRouter.route('/change-password').post((req, res) => {
 );
 
 userRouter.route('/users').get(getUsers).post(addUser).delete(deleteUsers);
-userRouter.route('/users/:id').get(getUserById).put(updateUserById);
+userRouter
+  .route("/users/:id")
+  .get(getUserById)
+  .put(updateUserById)
+  .patch(updateUserPartById);
 
 export default userRouter;

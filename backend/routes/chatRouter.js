@@ -1,17 +1,20 @@
 import {Router} from 'express';
-import ChatMessage  from '../models/chatMessage.js';
+import {
+     getMessages,
+        addMessage,
+        getMessagesByEventId,
+        getMessageById
+} from '../controller/chatMessageController.js';
 const chatRouter = Router();
 
 
-chatRouter.get('/:eventId/chat',async (req, res) => {
-    const messages= await ChatMessage.find({eventId:req.params.eventId}).populate('userId');
-    res.json(messages);
-}
-);
-chatRouter.post('/:eventId/chat',async (req, res) => {
-    const {text,userId} = req.body;
-    const message = await ChatMessage.create({text,eventId:req.params.eventId,userId});
-    res.json(message);
-}
-);
+chatRouter.route('/events/:eventId/chat').get(getMessages);
+
+chatRouter.route('/events/:eventId/chat').post(addMessage);
+chatRouter.route('/events/:eventId/chat/:id').get(getMessageById);
+chatRouter.route('/events/:eventId/chat').get(getMessagesByEventId);
+
+
+
+
 export default chatRouter;
