@@ -2,7 +2,6 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import ChatMessage from "./models/ChatMessage.js";
-import mongoose from "mongoose";
 import cors from "cors";
 import "dotenv/config.js";
 import  "./utils/connect.js";
@@ -28,12 +27,7 @@ const io = new Server(server, {
 });
 io.on("connection", (socket) => {
   console.log("New client connected", socket.id);
-
-  socket.on("leaveRoom", (room) => {
-    socket.leave(room);
-    console.log(`Client ${socket.id} left room: ${room}`);
-  });
-
+  
   socket.on("sendMessage", async ({ eventId, userId, text }) => {
     const message = new ChatMessage({ eventId, userId, text });
     await message.save();
@@ -44,6 +38,11 @@ io.on("connection", (socket) => {
     socket.join(eventId);
     console.log(`Client ${socket.id} joined room: ${eventId}`);
   });
+  // socket.on("leaveRoom", (room) => {
+  //   socket.leave(room);
+  //   console.log(`Client ${socket.id} left room: ${room}`);
+  // });
+
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });
@@ -56,7 +55,7 @@ app.use("/api", router);
     const status = err.status || 500;
     return res.status(status).json({
       error: {
-        message: err.message,
+            message: err.message,
         status,
       },
     });

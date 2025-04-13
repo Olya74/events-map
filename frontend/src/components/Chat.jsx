@@ -1,16 +1,13 @@
 import { useEffect,useState} from 'react'
 import {io} from 'socket.io-client'
-import api from '../api'
 
-const socket = io('http://localhost:8834', {
-    transports: ['websocket'],
-    upgrade: false,
-    auth: {
-        token: localStorage.getItem('token'),
-    },
-});
+const socket = io('http://localhost:8834');
+// const socket = io('http://localhost:8834', {
+//     transports: ['websocket'],
+//     upgrade: false
+// });
 
-function Chat(eventId,userId) {
+function Chat(eventId,user) {
     const [messages, setMessages] = useState([]);
     const [text, setText] = useState('');
     useEffect(() => {
@@ -21,20 +18,20 @@ function Chat(eventId,userId) {
         });
         
         socket.on('newMessage', (message) => {
-            setMessages((prevMessages) => [...prevMessages, message]);
+            setMessages((prev) => [...prev, message]);
         });
         // socket.on('chatHistory', (history) => {
         //     setMessages(history);
         // });
         return () => {
-            socket.off('message');
+            socket.off('newMessage');
             // socket.off('chatHistory');
         };
     }
     , [eventId]);
     const sendMessage = () => {
         if (text.trim()) {
-            socket.emit('sendMessage', {eventId,userId, text});
+            socket.emit('sendMessage', {eventId,userId:user._id, text});
             setText('');
         }
     }
@@ -45,7 +42,7 @@ function Chat(eventId,userId) {
       <div className="chat-box">
         {messages.map((message) => (
           <div key={message._id} className="message">
-            <strong>{message.userId.name}: </strong>
+            <strong>{message.userId}: </strong>
             {message.text}
           </div>
         ))}

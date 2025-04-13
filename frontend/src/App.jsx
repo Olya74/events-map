@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-
 import useAuthStore from "./store/useAuthStore";
 import RegisterForms from "./components/RegisterForms";
 import LoginForm from "./components/LoginForm";
+import Home from "./pages/Home";
 
 const App = () => {
   const { user, loading, fetchUser, logout } = useAuthStore();
@@ -17,6 +17,7 @@ const App = () => {
   if (user) {
     return (
       <div>
+          <Home />
         <h1>Welcome back,{user.name}</h1>
         <button onClick={logout}>Logout</button>
       </div>
@@ -24,6 +25,9 @@ const App = () => {
   }
   return (
     <div>
+       <h1 class="text-3xl font-bold underline">
+    Hello world!
+  </h1>
       {showRegister ? <RegisterForms /> : <LoginForm />}
 
       <p>

@@ -4,7 +4,7 @@ import ChatMessage from "../models/ChatMessage.js";
 const getMessages = async (req, res) => {
     const { eventId } = req.params;
     console.log(eventId);
-    const messages = await ChatMessage.findOne({ eventId: eventId }).populate('userId');
+    const messages = await ChatMessage.find({ eventId: eventId }).populate('userId');
     res.json(messages);
 }
 const addMessage = async (req, res) => {

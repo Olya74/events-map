@@ -3,10 +3,15 @@ import Event from "../models/Event.js";
 
 
 //const token=req.headers["Authorization"];
+// Пример запроса: /events?category=экология&date=2025-04-10
   const getEvents = async (req, res) => {
     try {
         console.log(req.user);
-        const events = await Event.find();
+        const { category, date } = req.query;
+        const query = {};
+        if (category) query.category = category;
+        if (date) query.date = date;
+        const events = query ? await Event.find(query) : await Event.find();
         res.status(200).json(events);
     } catch (error) {
         res.status(500).json({ message: error.message });
