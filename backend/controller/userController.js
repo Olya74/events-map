@@ -9,6 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const HCAPTCHA_SECRET = process.env.HCAPTCHA_SECRET;
 const SALT_ROUNDS = process.env.SALT_ROUNDS;
 const opt={runValidators:true,new:true};
+
 const registration = async (req, res) => {
   const { name, email, password, captcha } = req.body;
   if (!name || !email || !password || !captcha) {
@@ -16,7 +17,7 @@ const registration = async (req, res) => {
   }
 const existingUser=await User.findOne({email:email});
 if(existingUser){
-    return res.status(400).json({message:"user already exists"});
+    return res.status(501).json({message:"user already exists"});
 }
 const response=await fetch('https://hcaptcha.com/siteverify',
 {
@@ -36,11 +37,11 @@ if (!validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUp
     return res.status(400).json({ error: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character." });
 }
 
-const hashedPW=await bcrypt.hash(password,Number(SALT_ROUNDS));
+const hashedPW = await bcrypt.hash(password,Number(SALT_ROUNDS));
 
 try {
-  await User.create({name:sanitizedName,email:sanitizedEmail,password:hashedPW});
-return res.status(201).json({ message: "User registered successfully" });
+  const user=await User.create({name:sanitizedName,email:sanitizedEmail,password:hashedPW});
+return res.status(201).json({ message: "User registered successfully", user: { id: user._id, name: user.name, email: user.email } });
 } catch (error) {
   res.status(500).json({ error: error.message });
 }
@@ -49,30 +50,33 @@ return res.status(201).json({ message: "User registered successfully" });
 const login = async (req, res) => {
   const { email, password} = req.body;
  try{
+    const sanitizedEmail = validator.escape(email);
     const sanitizedPassword = validator.escape(password);
-    const user = await User.findOne({email: email});
-    if(!user) return res.status(400).json({error: 'Invalid credentials'});
-    const valid = await bcrypt.compare(sanitizedPassword, user.password);
-    if(!valid) return res.status(400).json({error: "Invalid credentials"})
-    const token = jwt.sign({id: user._id,name:user.name, email: user.email}, JWT_SECRET, {expiresIn: '30d'});
-   console.log("token", token);
+    const foundUser = await User.findOne({email: sanitizedEmail});
+    if(!foundUser) return res.status(404).json({error: 'You have to register yourself at first!'});
+    const validPW = await bcrypt.compare(sanitizedPassword, foundUser.password);
+    if(!validPW) return res.status(401).json({error: "Invalid credentials"})
+      const user = foundUser.toObject();
+      delete user.password; 
+    const token = jwt.sign({id: foundUser._id,name:foundUser.name, email: foundUser.email}, JWT_SECRET, {expiresIn: '30d'});
     res.cookie('token', token, {
         httpOnly: true,
         secure: false,
         sameSite: 'Lax',
         maxAge: 2592000000 
-    }).json({message: "Logged In"});
+    }).json({message: "Logged In", user});
     
  }catch (error) {
    res.status(500).json({ error: error.message });
  }
 }
 const authMe = async (req, res) => {
+  //wir brauchen cookiesParser in server.js
   const token = req.cookies.token;
   if (!token) return res.status(401).json({ error: "Not authorized" });
   try {
-    const decode = jwt.verify(token, JWT_SECRET);
-    res.json({id:decode.id,name:decode.name, email: decode.email });
+    const decoded = jwt.verify(token, JWT_SECRET);
+    res.json({id:decoded.id,name:decoded.name, email: decoded.email });
   } catch (e) {
     res.status(401).json({ e: "User not found or token invalid" });
   }

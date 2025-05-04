@@ -1,0 +1,29 @@
+.image-gallery {
+  display: flex;
+  gap: 10px;
+  flex-basis: 30%;
+    flex-wrap: wrap;
+}
+.image-gallery img {
+  width: 100%;
+  height: auto;
+  max-width: 10rem;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.image-gallery img:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s;
+}
+.image-gallery img:active {
+  transform: scale(0.95);
+  transition: transform 0.1s;
+}
+.image-gallery img:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #007bff;
+}
+.image-gallery img:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #007bff;
+}

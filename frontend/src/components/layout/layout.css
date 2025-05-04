@@ -1,0 +1,73 @@
+
+
+.layoutRegistration{
+    background-image: url('../../assets/tor.png')  ;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    /* animation:bG 10s ease-in-out infinite ;   alternate; */
+    /* animation-delay: 1s;
+    animation-fill-mode: forwards; */
+  
+}
+
+@keyframes bG {
+    0% {
+     opacity: 0;
+      transform: scale3d(0, 0, 0);
+        background-image: url('../../assets/tor.png');
+       
+    }
+    100% {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+        background-image: url('../../assets/berlin.png');
+        
+    }
+}
+
+.logo{
+    width: 2rem;
+    height: 2rem;
+    margin-right: 2rem;
+}
+header{
+    padding: 2rem;
+    font-size: large;
+     font-family: "Tagesschrift", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+.navbar{
+    background-color: #9ec2d3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+   
+}
+.navbar ul{
+    display: flex;
+    list-style: none;
+    padding: 0;
+    align-items: center;
+}
+.navbar ul li{
+    margin: 0 1rem;
+}
+#content{
+   min-height: 72vh; 
+   /* background-image: linear-gradient(to bottom right, #9ec2d3, #305374); */
+    
+}
+
+.footer{
+    background-color: #9ec2d3;
+    color: #2e475f;
+    font-size: 2rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  padding: 1rem;
+}

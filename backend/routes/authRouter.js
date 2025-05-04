@@ -12,6 +12,7 @@ const authRouter = express.Router();
 authRouter.route("/register").post(registration);
 authRouter.route("/login").post(login);
 authRouter.route("/me").get(authMe);
+ authRouter.route("/me").post(authMe);
 authRouter.route("/logout").post(logout);
 authRouter.route("/forgot-password").post((req, res) => {
   const { email } = req.body;

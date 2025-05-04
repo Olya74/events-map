@@ -1,43 +1,59 @@
-import {Schema,model} from 'mongoose';
+import { Schema, model } from "mongoose";
 
-const eventSchema= new Schema({
-    title: {
+const eventSchema = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+  },
+  category: {
+    type: String,
+    enum: ["sports", "music", "art", "technology", "food", "travel", "other"],
+    default: "other",
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  media: [
+    {
+      public_id: {
         type: String,
         required: true,
-    },
-    description: {
+      },
+      url: {
         type: String,
-    },
-    category:{
+        required: true,
+      },
+      type: {
         type: String,
-        enum: ['sports', 'music', 'art', 'technology', 'food', 'travel','other'],
-        default: 'other',
-        
+        enum: ["image", "video"],
+        required: true,
+      },
     },
-    date: {
-        type: Date,
-        default: Date.now,
+  ],
+  location: {
+    lat: Number,
+    lng: Number,
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+  attendees: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      default: [],
     },
-    image:{
-        type: String,
-    
-    },
-    location: {
-        type: String,
-    },
-     userId:{
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-     },
-    attendees: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-    }],
+  ],
 });
 // eventSchema.pre('save', function(next) {
 //     this.updatedAt = Date.now();
 //     next();
 // }
 // );
-const Event = model('Event', eventSchema);
+const Event = model("Event", eventSchema);
 export default Event;

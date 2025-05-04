@@ -4,20 +4,29 @@ import { Server } from "socket.io";
 import ChatMessage from "./models/ChatMessage.js";
 import cors from "cors";
 import "dotenv/config.js";
-import  "./utils/connect.js";
+import  './config/db.js';
 import cookiParser from "cookie-parser";
 import router from "./routes/index.js";
-
+import path from "path";
+import { fileURLToPath } from "url";
 const app = express();
 const PORT = process.env.PORT || 5000;
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+
+app.use(express.urlencoded({ extended: true,limit: "50mb" }));
 app.use(cookiParser());
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+}));
+ 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Wichtig: /uploads Ordner öffentlich machen
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -51,7 +60,7 @@ app.use("/api", router);
 
 
  app.use((err, req, res, next) => {
-    console.error(err);
+    console.error('error',err);
     const status = err.status || 500;
     return res.status(status).json({
       error: {

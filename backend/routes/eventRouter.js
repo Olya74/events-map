@@ -1,4 +1,5 @@
-import {Router} from 'express';
+import express from 'express';
+import  multer from 'multer';
 import {
     getEvents,
     getEventById,
@@ -7,11 +8,14 @@ import {
     updateEventPartById,
     deleteEvents
 } from '../controller/eventController.js';
-const router = Router();
+import { authMe } from '../controller/userController.js';
 
 
+const router = express.Router();
+const upload = multer({ dest: 'uploads/' });
 
-router.route('/events').get(getEvents).post(addEvent).delete(deleteEvents);
-router.route('/events/:id').get(getEventById).put(updateEventById).patch(updateEventPartById);
+
+router.route('/').get(getEvents).post(upload.array('files',5),addEvent).delete(deleteEvents);
+router.route('/:id').get(getEventById).put(updateEventById).patch(updateEventPartById);
 
 export default router;

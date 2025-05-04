@@ -3,11 +3,13 @@ import userRouter from './userRouter.js';
 import eventRouter from './eventRouter.js';
 import authRouter from './authRouter.js';
 import chatRouter from './chatRouter.js';
-import { authMiddleware } from '../middleware/authMiddleware.js';
+import mediaRouter from './mediaRouter.js';
+//import mediaRouter from './mediaRouter.js';
 const router = express.Router();
 
-router.use('/', authRouter);
+// router.use('/', authRouter);
 router.use(userRouter);
-router.use(eventRouter);
+router.use('/events',eventRouter);
 router.use(chatRouter);
+router.use('/media',mediaRouter);
 export default router;

@@ -1,3 +1,4 @@
+import { genSalt, hash } from 'bcrypt';
 import {Schema, model} from 'mongoose';
 
 const userSchema= new Schema({
@@ -31,10 +32,8 @@ const userSchema= new Schema({
 },{
     timestamps: true,
 });
-// userSchema.pre('save', function(next) {
-//     this.updatedAt = Date.now();
-//     next();
-// }
-// );
+
+
+
 const User = model('User', userSchema);
 export default User;

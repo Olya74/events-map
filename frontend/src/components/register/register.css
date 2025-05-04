@@ -1,0 +1,67 @@
+/* .formRegister{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    max-width:20% ;
+    margin: 10% auto;
+    font-size: 2rem;
+    position: relative;
+    background-color: #9ec2d3;
+   
+} */
+.form-name{
+    display: flex;
+    padding: 1rem;
+}
+label{
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2e475f;
+}
+.form-name > *{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.form input{
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    color: #333;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
+}
+.form button{
+    width: 100%;
+    padding: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: none;
+    background-color: #305374;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
+    transition: background-color 0.3s ease;
+}
+.form button:hover{
+    background-color: #8bacd3;
+}
+.captcha{
+   position: absolute;
+   top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.captcha-hidden{
+    display: none;
+}

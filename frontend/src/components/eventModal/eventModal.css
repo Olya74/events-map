@@ -1,0 +1,8 @@
+.success{
+    color: green;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+    text-align: center;
+    text-transform: capitalize;
+}

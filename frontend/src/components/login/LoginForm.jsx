@@ -1,8 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
-import useAuthStore from '../store/useAuthStore.jsx'
+import useAuthStore from "../../store/useAuthStore.jsx";
+import { useNavigate } from "react-router-dom";
+import "./login.css";
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const { fetchUser } = useAuthStore();
 
@@ -14,14 +17,15 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:8834/api/login", form);
-      console.log("login", form);
+      
       await fetchUser();
+      navigate("/");
     } catch (e) {
       alert(e.response.data.error);
     }
   };
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="form">
       <input
         name="email"
         type="email"
